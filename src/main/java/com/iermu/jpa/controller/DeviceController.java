@@ -1,5 +1,7 @@
 package com.iermu.jpa.controller;
 
+import com.iermu.jpa.core.bean.MyList;
+import com.iermu.jpa.core.bean.Result;
 import com.iermu.jpa.entity.DeviceEntity;
 import com.iermu.jpa.jpa.DeviceJPA;
 import org.slf4j.Logger;
@@ -24,18 +26,13 @@ public class DeviceController {
 
     @RequestMapping(value = "/list")
     @ResponseBody
-    public Object list(){
+    public Result list(){
         List<DeviceEntity> list = deviceJPA.findAll();
         Integer count = list.size();
+        Object result = new MyList();
+        ((MyList) result).setCount(count);
+        ((MyList) result).setList(list);
 
-        Object object = new DeviceListResult(); //deviceJPA.findAll();
-        ((DeviceListResult) object).list = list;
-        ((DeviceListResult) object).count = count;
-        return object;
+        return Result.success(result);
     }
 }
-
-class DeviceListResult{
-    public int count;
-    public List<DeviceEntity> list;
-    }
